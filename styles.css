@@ -153,8 +153,11 @@ body {
   color: transparent;
   display: grid;
   place-items: center;
+  position: relative;
+  z-index: 1;
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .cell:hover:not(:disabled) {

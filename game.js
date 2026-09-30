@@ -10,107 +10,120 @@
     [2, 4, 6],
   ];
 
-  const boardEl = document.getElementById("board");
-  const cells = [...boardEl.querySelectorAll(".cell")];
-  const statusEl = document.getElementById("status");
-  const scoreXEl = document.getElementById("score-x");
-  const scoreOEl = document.getElementById("score-o");
-  const scoreDrawEl = document.getElementById("score-draw");
-  const resetRoundBtn = document.getElementById("reset-round");
-  const resetScoresBtn = document.getElementById("reset-scores");
+  function boot() {
+    const boardEl = document.getElementById("board");
+    const cells = [...boardEl.querySelectorAll(".cell")];
+    const statusEl = document.getElementById("status");
+    const scoreXEl = document.getElementById("score-x");
+    const scoreOEl = document.getElementById("score-o");
+    const scoreDrawEl = document.getElementById("score-draw");
+    const resetRoundBtn = document.getElementById("reset-round");
+    const resetScoresBtn = document.getElementById("reset-scores");
 
-  let board = Array(9).fill(null);
-  let current = "X";
-  let locked = false;
-  let scores = { X: 0, O: 0, draw: 0 };
+    if (!boardEl || cells.length !== 9) {
+      console.error("Tic Tac Toe board failed to initialize");
+      return;
+    }
 
-  function setStatus(text, className = "") {
-    statusEl.textContent = text;
-    statusEl.className = `status ${className}`.trim();
-  }
+    let board = Array(9).fill(null);
+    let current = "X";
+    let locked = false;
+    let scores = { X: 0, O: 0, draw: 0 };
 
-  function renderScores() {
-    scoreXEl.textContent = scores.X;
-    scoreOEl.textContent = scores.O;
-    scoreDrawEl.textContent = scores.draw;
-  }
+    function setStatus(text, className = "") {
+      statusEl.textContent = text;
+      statusEl.className = `status ${className}`.trim();
+    }
 
-  function findWinner() {
-    for (const line of WIN_LINES) {
-      const [a, b, c] = line;
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return { player: board[a], line };
+    function renderScores() {
+      scoreXEl.textContent = String(scores.X);
+      scoreOEl.textContent = String(scores.O);
+      scoreDrawEl.textContent = String(scores.draw);
+    }
+
+    function findWinner() {
+      for (const line of WIN_LINES) {
+        const [a, b, c] = line;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return { player: board[a], line };
+        }
       }
+      return null;
     }
-    return null;
-  }
 
-  function endRound(message, className, winLine = []) {
-    locked = true;
-    setStatus(message, className);
-    cells.forEach((cell, i) => {
+    function endRound(message, className, winLine = []) {
+      locked = true;
+      setStatus(message, className);
+      cells.forEach((cell, i) => {
+        cell.disabled = true;
+        if (winLine.includes(i)) cell.classList.add("win");
+      });
+    }
+
+    function handleMove(index) {
+      if (locked || board[index]) return;
+
+      board[index] = current;
+      const cell = cells[index];
+      cell.textContent = current;
+      cell.classList.add(current.toLowerCase());
       cell.disabled = true;
-      if (winLine.includes(i)) cell.classList.add("win");
-    });
-  }
+      cell.setAttribute("aria-label", `Cell ${index + 1}, ${current}`);
 
-  function handleMove(index) {
-    if (locked || board[index]) return;
+      const winner = findWinner();
+      if (winner) {
+        scores[winner.player] += 1;
+        renderScores();
+        endRound(`${winner.player} wins!`, `win-${winner.player.toLowerCase()}`, winner.line);
+        return;
+      }
 
-    board[index] = current;
-    const cell = cells[index];
-    cell.textContent = current;
-    cell.classList.add(current.toLowerCase());
-    cell.disabled = true;
-    cell.setAttribute("aria-label", `Cell ${index + 1}, ${current}`);
+      if (board.every(Boolean)) {
+        scores.draw += 1;
+        renderScores();
+        endRound("It's a draw", "draw");
+        return;
+      }
 
-    const winner = findWinner();
-    if (winner) {
-      scores[winner.player] += 1;
-      renderScores();
-      endRound(`${winner.player} wins!`, `win-${winner.player.toLowerCase()}`, winner.line);
-      return;
+      current = current === "X" ? "O" : "X";
+      setStatus(`${current}'s turn`);
     }
 
-    if (board.every(Boolean)) {
-      scores.draw += 1;
-      renderScores();
-      endRound("It's a draw", "draw");
-      return;
+    function resetRound() {
+      board = Array(9).fill(null);
+      current = "X";
+      locked = false;
+      setStatus("X starts");
+      cells.forEach((cell, i) => {
+        cell.textContent = "";
+        cell.disabled = false;
+        cell.className = "cell";
+        cell.setAttribute("aria-label", `Cell ${i + 1}`);
+      });
     }
 
-    current = current === "X" ? "O" : "X";
-    setStatus(`${current}'s turn`);
-  }
+    function resetScores() {
+      scores = { X: 0, O: 0, draw: 0 };
+      renderScores();
+      resetRound();
+    }
 
-  function resetRound() {
-    board = Array(9).fill(null);
-    current = "X";
-    locked = false;
-    setStatus("X starts");
-    cells.forEach((cell, i) => {
-      cell.textContent = "";
-      cell.disabled = false;
-      cell.className = "cell";
-      cell.setAttribute("aria-label", `Cell ${i + 1}`);
-    });
-  }
-
-  function resetScores() {
-    scores = { X: 0, O: 0, draw: 0 };
-    renderScores();
-    resetRound();
-  }
-
-  cells.forEach((cell) => {
-    cell.addEventListener("click", () => {
+    boardEl.addEventListener("click", (event) => {
+      const cell = event.target.closest(".cell");
+      if (!cell || !boardEl.contains(cell)) return;
       handleMove(Number(cell.dataset.index));
     });
-  });
 
-  resetRoundBtn.addEventListener("click", resetRound);
-  resetScoresBtn.addEventListener("click", resetScores);
+    resetRoundBtn.addEventListener("click", resetRound);
+    resetScoresBtn.addEventListener("click", resetScores);
 
-  renderScores();
-  setStatus("X starts");
+    renderScores();
+    setStatus("X starts");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();

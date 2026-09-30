@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>Tic Tac Toe</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <div class="atmosphere" aria-hidden="true"></div>
@@ -36,15 +37,15 @@
     </div>
 
     <div class="board" id="board" role="grid" aria-label="Tic tac toe board">
-      <button class="cell" data-index="0" role="gridcell" aria-label="Cell 1"></button>
-      <button class="cell" data-index="1" role="gridcell" aria-label="Cell 2"></button>
-      <button class="cell" data-index="2" role="gridcell" aria-label="Cell 3"></button>
-      <button class="cell" data-index="3" role="gridcell" aria-label="Cell 4"></button>
-      <button class="cell" data-index="4" role="gridcell" aria-label="Cell 5"></button>
-      <button class="cell" data-index="5" role="gridcell" aria-label="Cell 6"></button>
-      <button class="cell" data-index="6" role="gridcell" aria-label="Cell 7"></button>
-      <button class="cell" data-index="7" role="gridcell" aria-label="Cell 8"></button>
-      <button class="cell" data-index="8" role="gridcell" aria-label="Cell 9"></button>
+      <button type="button" class="cell" data-index="0" role="gridcell" aria-label="Cell 1"></button>
+      <button type="button" class="cell" data-index="1" role="gridcell" aria-label="Cell 2"></button>
+      <button type="button" class="cell" data-index="2" role="gridcell" aria-label="Cell 3"></button>
+      <button type="button" class="cell" data-index="3" role="gridcell" aria-label="Cell 4"></button>
+      <button type="button" class="cell" data-index="4" role="gridcell" aria-label="Cell 5"></button>
+      <button type="button" class="cell" data-index="5" role="gridcell" aria-label="Cell 6"></button>
+      <button type="button" class="cell" data-index="6" role="gridcell" aria-label="Cell 7"></button>
+      <button type="button" class="cell" data-index="7" role="gridcell" aria-label="Cell 8"></button>
+      <button type="button" class="cell" data-index="8" role="gridcell" aria-label="Cell 9"></button>
     </div>
 
     <div class="actions">
@@ -53,6 +54,6 @@
     </div>
   </main>
 
-  <script src="game.js"></script>
+  <script src="game.js?v=2" defer></script>
 </body>
 </html>
