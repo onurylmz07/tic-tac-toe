@@ -3,56 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tic Tac Toe</title>
+  <title>Pixel Strike — Top-Down Shooter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="atmosphere" aria-hidden="true"></div>
+  <div id="game-wrap">
+    <canvas id="game" width="800" height="600" aria-label="Pixel Strike game"></canvas>
 
-  <main class="app">
-    <header class="brand">
-      <h1>Tic Tac Toe</h1>
-      <p class="tagline">Take turns. Claim three. Win the round.</p>
-    </header>
-
-    <p class="status" id="status" role="status" aria-live="polite">X starts</p>
-
-    <div class="scoreboard" aria-label="Score">
-      <div class="score score-x">
-        <span class="score-label">X</span>
-        <span class="score-value" id="score-x">0</span>
+    <div id="hud" class="hidden" aria-live="polite">
+      <div class="hud-row">
+        <span id="hud-level">LVL 1/5</span>
+        <span id="hud-wave">WAVE 1/2</span>
+        <span id="hud-enemies">ENEMIES 0</span>
       </div>
-      <div class="score score-draw">
-        <span class="score-label">Draws</span>
-        <span class="score-value" id="score-draw">0</span>
-      </div>
-      <div class="score score-o">
-        <span class="score-label">O</span>
-        <span class="score-value" id="score-o">0</span>
+      <div class="hud-row">
+        <div id="hud-hp" class="hp-bar" title="Health">
+          <div id="hud-hp-fill"></div>
+        </div>
+        <span id="hud-score">SCORE 0</span>
       </div>
     </div>
 
-    <div class="board" id="board" role="grid" aria-label="Tic tac toe board">
-      <button class="cell" data-index="0" role="gridcell" aria-label="Cell 1"></button>
-      <button class="cell" data-index="1" role="gridcell" aria-label="Cell 2"></button>
-      <button class="cell" data-index="2" role="gridcell" aria-label="Cell 3"></button>
-      <button class="cell" data-index="3" role="gridcell" aria-label="Cell 4"></button>
-      <button class="cell" data-index="4" role="gridcell" aria-label="Cell 5"></button>
-      <button class="cell" data-index="5" role="gridcell" aria-label="Cell 6"></button>
-      <button class="cell" data-index="6" role="gridcell" aria-label="Cell 7"></button>
-      <button class="cell" data-index="7" role="gridcell" aria-label="Cell 8"></button>
-      <button class="cell" data-index="8" role="gridcell" aria-label="Cell 9"></button>
-    </div>
+    <div id="overlay" class="overlay">
+      <div class="panel" id="panel-menu">
+        <h1>PIXEL STRIKE</h1>
+        <p class="blurb">Survive the waves. Clear 5 levels.</p>
+        <ul class="controls">
+          <li><kbd>←↑↓→</kbd> or <kbd>WASD</kbd> move</li>
+          <li><kbd>Mouse</kbd> aim · <kbd>Click</kbd> shoot</li>
+          <li><kbd>Esc</kbd> pause / quit</li>
+        </ul>
+        <p class="hi-score" id="menu-hi">HI-SCORE 0</p>
+        <button type="button" class="btn" id="btn-start">START</button>
+      </div>
 
-    <div class="actions">
-      <button type="button" class="btn btn-primary" id="reset-round">New round</button>
-      <button type="button" class="btn btn-ghost" id="reset-scores">Reset scores</button>
-    </div>
-  </main>
+      <div class="panel hidden" id="panel-pause">
+        <h2>PAUSED</h2>
+        <button type="button" class="btn" id="btn-resume">RESUME</button>
+        <button type="button" class="btn btn-ghost" id="btn-quit">QUIT TO MENU</button>
+      </div>
 
-  <script src="game.js"></script>
+      <div class="panel hidden" id="panel-levelclear">
+        <h2>LEVEL CLEAR!</h2>
+        <p id="levelclear-msg">Get ready…</p>
+        <button type="button" class="btn" id="btn-next">NEXT LEVEL</button>
+      </div>
+
+      <div class="panel hidden" id="panel-gameover">
+        <h2>GAME OVER</h2>
+        <p id="gameover-msg">Score 0</p>
+        <button type="button" class="btn" id="btn-retry">RETRY</button>
+        <button type="button" class="btn btn-ghost" id="btn-menu-go">MENU</button>
+      </div>
+
+      <div class="panel hidden" id="panel-victory">
+        <h2>VICTORY!</h2>
+        <p id="victory-msg">You cleared all 5 levels.</p>
+        <p class="hi-score" id="victory-hi">HI-SCORE 0</p>
+        <button type="button" class="btn" id="btn-menu-win">MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
